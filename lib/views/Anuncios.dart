@@ -38,9 +38,11 @@ class _AnunciosState extends State<Anuncios> {
   Future _verificaUsuarioLogado() async {
 
     FirebaseAuth auth = FirebaseAuth.instance;
-    //User usuarioLogado = await auth.currentUser;
+    User usuarioLogado = await auth.currentUser;
 
-    if (auth.currentUser == null) {
+    print("usuario: $usuarioLogado");
+
+    if (usuarioLogado == null) {
       itensMenu = [
         "Entrar / Cadastrar"
       ];
@@ -58,8 +60,6 @@ class _AnunciosState extends State<Anuncios> {
     super.initState();
     _verificaUsuarioLogado();
   }
-
-
 
   @override
   Widget build(BuildContext context) {

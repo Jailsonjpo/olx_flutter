@@ -1,11 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:olx_flutter/models/Usuario.dart';
-import 'file:///C:/Projetos_Flutter/olx_flutter/lib/views/widgets/InputCustomizado.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:olx_flutter/views/widgets/BotaoCustomizado.dart';
+
+import 'widgets/InputCustomizado.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -14,8 +14,8 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
-  TextEditingController _controllerEmail = TextEditingController(text: "j@g.com");
-  TextEditingController _controllerSenha = TextEditingController(text: "123456");
+  TextEditingController _controllerEmail = TextEditingController();
+  TextEditingController _controllerSenha = TextEditingController();
   bool _cadastrar = false;
   String _mensagemErro = "";
   String _textoBotao = "Entrar";
@@ -30,7 +30,6 @@ class _LoginState extends State<Login> {
       //redireciona para tela principal
       Navigator.pushReplacementNamed(context, "/" );
     });
-
   }
 
   _logarUsuario(Usuario usuario){
@@ -69,14 +68,12 @@ class _LoginState extends State<Login> {
           _logarUsuario(usuario);
         }
 
-
       }else{
 
         setState(() {
           _mensagemErro = "Preencha a senha! A senha deve conter no mínimo 6 caracteres!";
         });
       }
-
 
     }else{
 
@@ -113,14 +110,16 @@ class _LoginState extends State<Login> {
                   hint: "E-mail",
                   autofocus: true,
                   type: TextInputType.emailAddress,
+                  maxLines: 1,
                 ),
 
                 InputCustomizado(
                   controller: _controllerSenha,
                   hint: "Senha",
                   obscure: true,
+                 type: TextInputType.text,
+                 maxLines: 1,
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -139,9 +138,7 @@ class _LoginState extends State<Login> {
                         }
                     ),
                     Text("Cadastrar"),
-
                   ],
-
                 ),
                 BotaoCustomizado(
                   texto: _textoBotao,
