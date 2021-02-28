@@ -101,11 +101,8 @@ class _MeusAnunciosState extends State<MeusAnuncios> {
                 itemBuilder: (_, indice) {
                   List<DocumentSnapshot> anuncios = querySnapshot.docs.toList();
                   DocumentSnapshot documentSnapshot = anuncios[indice];
+                  Anuncio anuncio = Anuncio.fromDocumentSnapshot(documentSnapshot);
 
-                //  print("informaçoes snapshot: $documentSnapshot" );
-
-                  Anuncio anuncio =
-                      Anuncio.fromDocumentSnapshot(documentSnapshot);
                   return ItemAnuncio(
                     anuncio: anuncio,
                     onPressedRemover: () {
