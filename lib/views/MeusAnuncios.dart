@@ -44,7 +44,14 @@ class _MeusAnunciosState extends State<MeusAnuncios> {
         .doc(_idUsuarioLogado)
         .collection("anuncios")
         .doc(idAnuncio)
-        .delete();
+        .delete().then((_){
+
+          db.collection("anuncios")
+              .doc(idAnuncio)
+              .delete();
+
+
+        });
   }
 
   @override

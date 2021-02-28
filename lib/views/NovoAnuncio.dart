@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:olx_flutter/models/Anuncio.dart';
+import 'package:olx_flutter/util/Configuracoes.dart';
 import 'package:olx_flutter/views/widgets/BotaoCustomizado.dart';
 import 'package:olx_flutter/views/widgets/InputCustomizado.dart';
 import 'package:validadores/validadores.dart';
@@ -88,8 +89,13 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
     .doc(_anuncio.id)
     .set(_anuncio.toMap()).then((_){
 
-      Navigator.pop(_dialogContext);
-      Navigator.pop(context);
+      //Salvar anúncio público
+      db.collection("anuncios")
+      .doc(_anuncio.id)
+      .set(_anuncio.toMap()).then((_){
+        Navigator.pop(_dialogContext);
+        Navigator.pop(context);
+      });
 
     });
   }
@@ -282,35 +288,11 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
   _carregarItensDropdown(){
 
     //Categorias
-    _listaItensDropCategorias.add(
-        DropdownMenuItem(child: Text("Automóvel"), value: "auto",)
-    );
-
-    _listaItensDropCategorias.add(
-        DropdownMenuItem(child: Text("Imóvel"), value: "imovel",)
-    );
-
-    _listaItensDropCategorias.add(
-        DropdownMenuItem(child: Text("Eletrônicos"), value: "eletro",)
-    );
-
-    _listaItensDropCategorias.add(
-        DropdownMenuItem(child: Text("Moda"), value: "moda",)
-    );
-
-    _listaItensDropCategorias.add(
-        DropdownMenuItem(child: Text("Esportes"), value: "esportes",)
-    );
+    _listaItensDropCategorias = Configuracoes.getCategorias();
 
     //Estados
-    
-   for (var estado in Estados.listaEstadosSigla) {
+    _listaItensDropEstados = Configuracoes.getEstados();
 
-     _listaItensDropEstados.add(
-       DropdownMenuItem(child: Text(estado), value: estado,)
-     );
-
-   }
   }
 
   @override
@@ -453,7 +435,7 @@ class _NovoAnuncioState extends State<NovoAnuncio> {
                           padding: EdgeInsets.all(8),
                         child: DropdownButtonFormField(
                           value: _itemSelecionadoEstado,
-                          hint: Text("Estados"),
+                          hint: Text("Região"),
                           onSaved: (estado){
                             _anuncio.estado = estado;
                           },
