@@ -1,10 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:olx_flutter/models/Usuario.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:olx_flutter/views/widgets/BotaoCustomizado.dart';
-
 import 'widgets/InputCustomizado.dart';
 
 class Login extends StatefulWidget {
@@ -25,7 +22,7 @@ class _LoginState extends State<Login> {
     auth
         .createUserWithEmailAndPassword(
             email: usuario.email, password: usuario.senha)
-        .then((FirebaseUser) {
+        .then((firebaseUser) {
       //redireciona para tela principal
       Navigator.pushReplacementNamed(context, "/");
     });
@@ -36,7 +33,7 @@ class _LoginState extends State<Login> {
     auth
         .signInWithEmailAndPassword(
             email: usuario.email, password: usuario.senha)
-        .then((FirebaseUser) {
+        .then((firebaseUser) {
       //redireciona para tela principal
       Navigator.pushReplacementNamed(context, "/");
     });
@@ -104,8 +101,6 @@ class _LoginState extends State<Login> {
                   controller: _controllerSenha,
                   hint: "Senha",
                   obscure: true,
-                  type: TextInputType.text,
-                  maxLines: 1,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -118,37 +113,42 @@ class _LoginState extends State<Login> {
                             _cadastrar = valor;
                             _textoBotao = "Entrar";
 
-                            if (_cadastrar) {
+                            if ( _cadastrar ) {
                               _textoBotao = "Cadastrar";
                             }
                           });
-                        }),
+                        },
+                        ),
                     Text("Cadastrar"),
                   ],
                 ),
                 BotaoCustomizado(
                   texto: _textoBotao,
-                  onPressed: _validarCampos(),
-                ),
-                FlatButton(
-                  child: Text("Ir para anúncios"),
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, "/");
-                  },
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Text(_mensagemErro,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red)),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
+                  onPressed: (){
+                    _validarCampos();
+                  }
+    ),
+    FlatButton(
+    child: Text("Ir para anúncios"),
+    onPressed: () {
+    Navigator.pushReplacementNamed(context, "/");
+    },
+    ),
+    Padding(
+    padding: EdgeInsets.only(top: 20),
+    child: Text(_mensagemErro,
+    style: TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: Colors.red)),
+    )
+    ],
+    ),
+    ),
+    ),
+    ),
     );
+    }
   }
-}
+
+

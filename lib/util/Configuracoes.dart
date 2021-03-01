@@ -1,5 +1,6 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:olx_flutter/main.dart';
 
 class Configuracoes {
 
@@ -11,9 +12,9 @@ class Configuracoes {
     listaItensDropEstados.add(DropdownMenuItem(
       child: Text(
         "Região",
-        style: TextStyle(color: Color(0xff9c27b0)),
+        style: TextStyle(color: temaPadrao.primaryColor),
       ),
-      value: "null",
+      value: null,
     ));
 
     for (var estado in Estados.listaEstadosSigla) {
@@ -35,7 +36,7 @@ class Configuracoes {
         "Categoria",
         style: TextStyle(color: Color(0xff9c27b0)),
       ),
-      value: "null",
+      value: null,
     ));
 
     itensDropCategorias.add(DropdownMenuItem(
