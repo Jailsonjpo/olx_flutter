@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:olx_flutter/views/Anuncios.dart';
+import 'package:olx_flutter/views/DetalhesAnuncio.dart';
 import 'package:olx_flutter/views/Login.dart';
 import 'package:olx_flutter/views/MeusAnuncios.dart';
 import 'package:olx_flutter/views/NovoAnuncio.dart';
@@ -31,6 +32,11 @@ class RouteGenerator{
       case "/novo-anuncio" :
         return MaterialPageRoute(
             builder: (_) => NovoAnuncio()
+        );
+
+      case "/detalhes-anuncio" :
+        return MaterialPageRoute(
+            builder: (_) => DetalhesAnuncio(args)
         );
 
         defaut:

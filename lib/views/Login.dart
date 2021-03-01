@@ -13,49 +13,42 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerSenha = TextEditingController();
   bool _cadastrar = false;
   String _mensagemErro = "";
   String _textoBotao = "Entrar";
 
-  _cadastrarUsuario(Usuario usuario){
-    
+  _cadastrarUsuario(Usuario usuario) {
     FirebaseAuth auth = FirebaseAuth.instance;
-    
-    auth.createUserWithEmailAndPassword(email: usuario.email, password: usuario.senha)
-    .then((FirebaseUser){
 
+    auth
+        .createUserWithEmailAndPassword(
+            email: usuario.email, password: usuario.senha)
+        .then((FirebaseUser) {
       //redireciona para tela principal
-      Navigator.pushReplacementNamed(context, "/" );
+      Navigator.pushReplacementNamed(context, "/");
     });
   }
 
-  _logarUsuario(Usuario usuario){
-
+  _logarUsuario(Usuario usuario) {
     FirebaseAuth auth = FirebaseAuth.instance;
-    auth.signInWithEmailAndPassword(email: usuario.email, password: usuario.senha)
-    .then((FirebaseUser){
-
+    auth
+        .signInWithEmailAndPassword(
+            email: usuario.email, password: usuario.senha)
+        .then((FirebaseUser) {
       //redireciona para tela principal
-      Navigator.pushReplacementNamed(context, "/" );
-
-
+      Navigator.pushReplacementNamed(context, "/");
     });
-
   }
 
-  _validarCampos(){
-
+  _validarCampos() {
     //Recuperar dados dos campos
     String email = _controllerEmail.text;
     String senha = _controllerSenha.text;
 
     if (email.isNotEmpty && email.contains("@")) {
-
-      if (senha.isNotEmpty && senha.length >= 6 ) {
-
+      if (senha.isNotEmpty && senha.length >= 6) {
         //Configura usuario
         Usuario usuario = Usuario();
         usuario.email = email;
@@ -63,32 +56,28 @@ class _LoginState extends State<Login> {
 
         //Cadastrar ou logar
         if (_cadastrar) {
-           _cadastrarUsuario(usuario);
-        }else{
+          _cadastrarUsuario(usuario);
+        } else {
           _logarUsuario(usuario);
         }
-
-      }else{
-
+      } else {
         setState(() {
-          _mensagemErro = "Preencha a senha! A senha deve conter no mínimo 6 caracteres!";
+          _mensagemErro =
+              "Preencha a senha! A senha deve conter no mínimo 6 caracteres!";
         });
       }
-
-    }else{
-
+    } else {
       setState(() {
         _mensagemErro = "Preencha o E-mail válido";
       });
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(""),        
+        title: Text(""),
       ),
       body: Container(
         padding: EdgeInsets.all(16),
@@ -98,27 +87,25 @@ class _LoginState extends State<Login> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
-                    padding: EdgeInsets.only(bottom: 32),
-                  child: Image.asset("imagens/logo.png",
+                  padding: EdgeInsets.only(bottom: 32),
+                  child: Image.asset(
+                    "imagens/logo.png",
                     width: 200,
-                    height: 150,                      
+                    height: 150,
                   ),
                 ),
-
                 InputCustomizado(
                   controller: _controllerEmail,
                   hint: "E-mail",
                   autofocus: true,
                   type: TextInputType.emailAddress,
-                  maxLines: 1,
                 ),
-
                 InputCustomizado(
                   controller: _controllerSenha,
                   hint: "Senha",
                   obscure: true,
-                 type: TextInputType.text,
-                 maxLines: 1,
+                  type: TextInputType.text,
+                  maxLines: 1,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -126,7 +113,7 @@ class _LoginState extends State<Login> {
                     Text("logar"),
                     Switch(
                         value: _cadastrar,
-                        onChanged: (bool valor){
+                        onChanged: (bool valor) {
                           setState(() {
                             _cadastrar = valor;
                             _textoBotao = "Entrar";
@@ -135,8 +122,7 @@ class _LoginState extends State<Login> {
                               _textoBotao = "Cadastrar";
                             }
                           });
-                        }
-                    ),
+                        }),
                     Text("Cadastrar"),
                   ],
                 ),
@@ -144,15 +130,19 @@ class _LoginState extends State<Login> {
                   texto: _textoBotao,
                   onPressed: _validarCampos(),
                 ),
-
+                FlatButton(
+                  child: Text("Ir para anúncios"),
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, "/");
+                  },
+                ),
                 Padding(
                   padding: EdgeInsets.only(top: 20),
-                  child: Text(_mensagemErro, style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red
-                  )),
-
+                  child: Text(_mensagemErro,
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red)),
                 )
               ],
             ),

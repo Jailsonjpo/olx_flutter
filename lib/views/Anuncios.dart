@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:olx_flutter/main.dart';
 import 'package:olx_flutter/models/Anuncio.dart';
 import 'package:olx_flutter/util/Configuracoes.dart';
 import 'package:olx_flutter/views/widgets/ItemAnuncio.dart';
@@ -65,7 +66,7 @@ class _AnunciosState extends State<Anuncios> {
     _listaItensDropEstados = Configuracoes.getEstados();
   }
 
-  Future<Stream<QuerySnapshot>> _adicionarListenerAnuncios()  async {
+  Future<Stream<QuerySnapshot>> _adicionarListenerAnuncios() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
 
     Stream<QuerySnapshot> stream = db.collection("anuncios").snapshots();
@@ -75,17 +76,17 @@ class _AnunciosState extends State<Anuncios> {
     });
   }
 
-  Future<Stream<QuerySnapshot>> _filtrarAnuncios()async {
+  Future<Stream<QuerySnapshot>> _filtrarAnuncios() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
 
     Query query = db.collection("anuncios");
 
-    if ( _itemSelecionadoEstado != null) {
-    query = query.where("estado", isEqualTo: _itemSelecionadoEstado);
+    if (_itemSelecionadoEstado != null) {
+      query = query.where("estado", isEqualTo: _itemSelecionadoEstado);
     }
 
     if (_itemSelecionadoCategoria != null) {
-    query = query.where("categoria", isEqualTo: _itemSelecionadoCategoria);
+      query = query.where("categoria", isEqualTo: _itemSelecionadoCategoria);
     }
 
     Stream<QuerySnapshot> stream = query.snapshots();
@@ -105,6 +106,16 @@ class _AnunciosState extends State<Anuncios> {
 
   @override
   Widget build(BuildContext context) {
+
+    var carregandoDados = Center(
+      child: Column(
+        children: [
+          Text("Carregando Anúncios"),
+          CircularProgressIndicator()
+        ],
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text("OLX"),
@@ -131,19 +142,20 @@ class _AnunciosState extends State<Anuncios> {
                 Expanded(
                     child: DropdownButtonHideUnderline(
                         child: Center(
-                  child: DropdownButton(
-                      hint: Text("Região"),
-                      iconEnabledColor: Color(0xff9c27b0),
-                      value: _itemSelecionadoEstado,
-                      items: _listaItensDropEstados,
-                      style: TextStyle(fontSize: 22, color: Colors.black),
-                      onChanged: (estado) {
-                        setState(() {
-                          _itemSelecionadoEstado = estado;
-                          _filtrarAnuncios();
-                        });
-                      }),
-                ))),
+                          child: DropdownButton(
+                              hint: Text("Região"),
+                              iconEnabledColor: temaPadrao.primaryColor,
+                              value: _itemSelecionadoEstado,
+                              items: _listaItensDropEstados,
+                              style: TextStyle(
+                                  fontSize: 22, color: Colors.black),
+                              onChanged: (estado) {
+                                setState(() {
+                                  _itemSelecionadoEstado = estado;
+                                  _filtrarAnuncios();
+                                });
+                              }),
+                        ))),
                 Container(
                   color: Colors.grey[200],
                   width: 2,
@@ -152,20 +164,20 @@ class _AnunciosState extends State<Anuncios> {
                 Expanded(
                     child: DropdownButtonHideUnderline(
                         child: Center(
-                  child: DropdownButton(
-                      hint: Text("Categoria"),
-                      iconEnabledColor: Color(0xff9c27b0),
-                      value: _itemSelecionadoCategoria,
-                      items: _listaItensDropCategorias,
-                      style: TextStyle(fontSize: 22, color: Colors.black),
-                      onChanged: (categoria) {
-                        setState(() {
-                          _itemSelecionadoCategoria = categoria;
-                          _filtrarAnuncios();
-
-                        });
-                      }),
-                )))
+                          child: DropdownButton(
+                              hint: Text("Categoria"),
+                              iconEnabledColor: temaPadrao.primaryColor,
+                              value: _itemSelecionadoCategoria,
+                              items: _listaItensDropCategorias,
+                              style: TextStyle(
+                                  fontSize: 22, color: Colors.black),
+                              onChanged: (categoria) {
+                                setState(() {
+                                  _itemSelecionadoCategoria = categoria;
+                                  _filtrarAnuncios();
+                                });
+                              }),
+                        )))
               ],
             ),
             StreamBuilder(
@@ -174,6 +186,10 @@ class _AnunciosState extends State<Anuncios> {
                   switch (snapshot.connectionState) {
                     case ConnectionState.none:
                     case ConnectionState.waiting:
+
+                      return carregandoDados;
+                      break;
+
                     case ConnectionState.active:
                     case ConnectionState.done:
                       QuerySnapshot querySnapshot = snapshot.data;
@@ -194,18 +210,18 @@ class _AnunciosState extends State<Anuncios> {
                               itemCount: querySnapshot.docs.length,
                               itemBuilder: (_, indice) {
                                 List<DocumentSnapshot> anuncios =
-                                    querySnapshot.docs.toList();
+                                querySnapshot.docs.toList();
                                 DocumentSnapshot documentSnapshot =
-                                    anuncios[indice];
+                                anuncios[indice];
                                 Anuncio anuncio = Anuncio.fromDocumentSnapshot(
                                     documentSnapshot);
 
                                 return ItemAnuncio(
                                   anuncio: anuncio,
                                   onTapItem: () {
-
-
-
+                                    Navigator.pushNamed(
+                                        context, "/detalhes-anuncio",
+                                        arguments: anuncio);
                                   },
                                 );
                               }));
